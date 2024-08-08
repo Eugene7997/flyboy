@@ -3,7 +3,7 @@ const express = require("express")
 const Mongoclient = require("mongodb").MongoClient
 const mongoose = require("mongoose")
 const cors = require("cors");
-const FlightLog = require('../models/flightLog.model');
+const FlightLog = require('./models/flightLog.model');
 
 const app = express()
 app.use(cors())
