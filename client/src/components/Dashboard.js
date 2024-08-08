@@ -1,21 +1,22 @@
-import FlightRegistrationForm from "./RegisterFlightLog";
+// import FlightRegistrationForm from "./RegisterFlightLog";
 import UserRegistrationForm from "./RegisterUser";
 import Home from "./Home";
+import About from "./About";
+import Header from "./Header";
 import UserSignInForm from "./UserSignIn";
-import {BrowserRouter, Routes, Route} from 'react-router-dom';
-
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 const DashBoard = () => {
     return (
-        <div>
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/" element={<Home/>}/>
-                    <Route path="/sign_up" element={<UserRegistrationForm/>}/>
-                    <Route path="/sign_in" element={<UserSignInForm/>}/>
-                </Routes>
-            </BrowserRouter>
-        </div>
+        <BrowserRouter>
+            <Header />
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/sign_up" element={<UserRegistrationForm />} />
+                <Route path="/sign_in" element={<UserSignInForm />} />
+            </Routes>
+        </BrowserRouter>
     )
 }
 export default DashBoard;
