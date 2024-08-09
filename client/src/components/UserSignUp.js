@@ -1,5 +1,6 @@
 import { Form } from "react-bootstrap";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import IconButton from '@mui/material/IconButton';
@@ -82,6 +83,12 @@ function UserRegistrationForm() {
                 </Form.Group>
                 <button disabled={loading} type="submit" className="bg-slate-700 text-white p-3">{loading ? "Loading..." : 'Sign up'}</button>
             </form>
+            <div className='flex gap-2 mt-5'>
+                <p>Already have an account?</p>
+                <Link to='/sign_in'>
+                    <span className='text-blue-500'>Sign in</span>
+                </Link>
+            </div>
             <div>
                 <p className='text-red-700'>{error}</p>
                 <p>{success}</p>
