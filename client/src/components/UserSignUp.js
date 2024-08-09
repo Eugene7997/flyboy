@@ -1,6 +1,6 @@
 import { Form } from "react-bootstrap";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import IconButton from '@mui/material/IconButton';
@@ -11,6 +11,7 @@ function UserRegistrationForm() {
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate()
 
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
@@ -56,6 +57,7 @@ function UserRegistrationForm() {
             setLoading(false)
             setError(false)
             setSuccess(data.message)
+            navigate('/sign_in')
         }
         catch (err) {
             setLoading(false)
