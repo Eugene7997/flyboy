@@ -31,7 +31,10 @@ const signIn = async (req, res) => {
         const token = jwt.sign({id: validUser._id}, process.env.JWT_SECRET)
         const {password: hashedPassword, ...rest} = validUser._doc
         const expiryDate = new Date(Date.now() + 10800000)
-        res.cookie('access_token', token, {httpOnly: true, expires: expiryDate}).status(200).json({message: "User signed in successfully"})
+        return res
+            .cookie('access_token', token, {httpOnly: true, expires: expiryDate})
+            .status(200)
+            .json(rest)
     }
     catch (error) {
         return res.status(500).json({ message: error.message });
