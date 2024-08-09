@@ -5,11 +5,13 @@ const express = require("express")
 const cors = require("cors");
 const app = express()
 const flightlogRoutes = require('./routes/flightlog.route')
+const userRoutes = require('./routes/auth.route')
 
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 app.use("/api/flightlogs", flightlogRoutes)
+app.use("/api/users", userRoutes)
 
 app.get("/", (req, res)=>{
     res.send("App is Working");
