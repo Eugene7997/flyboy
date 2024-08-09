@@ -8,6 +8,7 @@ function UserRegistrationForm() {
     const [formData, setFormData] = useState({})
     const [showPassword, setShowPassword] = useState(false);
     const [error, setError] = useState(null);
+    const [success, setSuccess] = useState(null);
     const [loading, setLoading] = useState(false);
 
     const handleClickShowPassword = () => {
@@ -53,6 +54,7 @@ function UserRegistrationForm() {
             console.log(data)
             setLoading(false)
             setError(false)
+            setSuccess(data.message)
         }
         catch (err) {
             setLoading(false)
@@ -82,6 +84,7 @@ function UserRegistrationForm() {
             </form>
             <div>
                 <p className='text-red-700'>{error}</p>
+                <p>{success}</p>
             </div>
         </>
     )
