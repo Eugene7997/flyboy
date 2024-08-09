@@ -1,9 +1,9 @@
 // import FlightRegistrationForm from "./RegisterFlightLog";
-import UserRegistrationForm from "./RegisterUser";
 import Home from "./Home";
 import About from "./About";
 import Header from "./Header";
 import UserSignInForm from "./UserSignIn";
+import UserRegistrationForm from "./UserSignUp";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 const DashBoard = () => {
