@@ -9,6 +9,7 @@ function UserRegistrationForm() {
     const [formData, setFormData] = useState({})
     const [showPassword, setShowPassword] = useState(false)
     const [error, setError] = useState(null)
+    const [success, setSuccess] = useState(null);
     const [loading, setLoading] = useState(false)
     const navigate = useNavigate()
 
@@ -46,9 +47,13 @@ function UserRegistrationForm() {
             })
             if (!res.ok) {
                 const errorData = await res.json();
-                if (res.status === 409 || (errorData.message && errorData.message.includes('duplicate key error'))) {
-                    throw new Error("Username is already taken.");
-                } else {
+                if (res.status === 404 || (errorData.message && errorData.message.includes('Username not found'))) {
+                    throw new Error("Username is not found.");
+                }
+                else if (res.status === 401 || (errorData.message && errorData.message.includes('Wrong Password entered'))) {
+                    throw new Error("Incorrect password. Try again.");
+                } 
+                else {
                     throw new Error(errorData.message || "Something went wrong. Please try again.");
                 }
             }
@@ -56,6 +61,7 @@ function UserRegistrationForm() {
             console.log(data)
             setLoading(false)
             setError(false)
+            setSuccess(data.message)
             navigate('/')
         }
         catch (err) {
@@ -91,6 +97,8 @@ function UserRegistrationForm() {
                 </Link>
             </div>
             <div>
+                <p className='text-red-700'>{error}</p>
+                <p>{success}</p>
             </div>
         </>
     )
