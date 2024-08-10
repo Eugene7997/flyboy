@@ -4,14 +4,15 @@ import { Link, useNavigate } from "react-router-dom";
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import IconButton from '@mui/material/IconButton';
+import {signInStart, signInSuccess, signInFailure} from '../redux/user/userSlice'
+import {useDispatch, useSelector} from 'react-redux'
 
 function UserRegistrationForm() {
     const [formData, setFormData] = useState({})
     const [showPassword, setShowPassword] = useState(false);
-    const [error, setError] = useState(null);
-    const [success, setSuccess] = useState(null);
-    const [loading, setLoading] = useState(false);
+    const [loading, error] = useSelector((state)=> state.user)
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
@@ -21,11 +22,11 @@ function UserRegistrationForm() {
     }
     const validateFormBeforeSubmit = () => {
         if (!formData.username || formData.username.trim() === '') {
-            setError("Username is required.");
+            dispatch(signInFailure("Username is required."))
             return false;
         }
         if (!formData.password || formData.password.trim() === '') {
-            setError("Password is required.");
+            dispatch(signInFailure("Password is required."))
             return false;
         }
         return true;
@@ -36,7 +37,7 @@ function UserRegistrationForm() {
             return;
         }
         try {
-            setLoading(true)
+            dispatch(signInStart())
             const res = await fetch("http://localhost:5000/api/users/sign_up", {
                 method: "POST",
                 headers: {
@@ -54,15 +55,11 @@ function UserRegistrationForm() {
             }
             const data = await res.json()
             console.log(data)
-            setLoading(false)
-            setError(false)
-            setSuccess(data.message)
+            dispatch(signInSuccess(data))
             navigate('/sign_in')
         }
         catch (err) {
-            setLoading(false)
-            console.log(err)
-            setError(err.message)
+            dispatch(signInFailure(err.message))
         }
         
     }
@@ -93,7 +90,6 @@ function UserRegistrationForm() {
             </div>
             <div>
                 <p className='text-red-700'>{error}</p>
-                <p>{success}</p>
             </div>
         </>
     )
