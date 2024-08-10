@@ -10,7 +10,7 @@ import {useDispatch, useSelector} from 'react-redux'
 function UserRegistrationForm() {
     const [formData, setFormData] = useState({})
     const [showPassword, setShowPassword] = useState(false)
-    const [loading, error] = useSelector((state)=> state.user)
+    const {loading, error} = useSelector((state)=> state.user)
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
