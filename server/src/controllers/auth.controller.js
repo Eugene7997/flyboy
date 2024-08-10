@@ -45,4 +45,17 @@ const signOut = async (req, res) => {
     res.clearCookie("access_token").status(200).json({message: "Sign out successful"})
 }
 
-module.exports = { signUp, signIn, signOut }
+const deleteUser = async (req, res) => {
+    if (req.user.id !== req.params.id) {
+        return res.status(403).json({message: "You are not authorized to delete this user"})
+    }
+    try {
+        await User.findByIdAndDelete(req.params.id)
+        return res.status(200).json({message: "User deleted successfully"})
+    }
+    catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+}
+
+module.exports = { signUp, signIn, signOut, deleteUser }
