@@ -1,22 +1,37 @@
 import React, { useState, useEffect } from 'react';
 import FlightItem from './FlightItem'; 
+import {useDispatch, useSelector} from 'react-redux'
+import {
+    fetchFlightsStart,
+    fetchFlightsSuccess,
+    fetchFlightsFailure,
+    updateFlightStart,
+    updateFlightSuccess,
+    updateFlightFailure,
+    deleteFlightStart,
+    deleteFlightSuccess,
+    deleteFlightFailure,
+    clearErrors
+} from '../redux/flight/flightSlice'
 
 export default function FlightDisplay() {
-    const [flightLogs, setFlightLogs] = useState([]);
-    const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
+    const dispatch = useDispatch()
+    const {flights, loading, errors} = useSelector((state)=> state.flight)
 
     useEffect(() => {
         const fetchFlightLogs = async () => {
+            dispatch(clearErrors())
+            dispatch(fetchFlightsStart())
             try {
                 const response = await fetch("http://localhost:5000/api/flightlogs", { method: "GET", credentials: 'include' });
                 if (!response.ok) {
                     throw new Error("Failed to fetch flight logs.");
                 }
                 const data = await response.json();
-                setFlightLogs(data);
-                setLoading(false)
+                dispatch(fetchFlightsSuccess(data))
             } catch (error) {
+                dispatch(fetchFlightsFailure(error.message))
                 console.error("Error fetching flight logs:", error.message);
             }
         };
@@ -25,6 +40,7 @@ export default function FlightDisplay() {
 
     const handleSave = async (updatedFlightLog) => {
         try {
+            dispatch(updateFlightStart())
             const response = await fetch(`http://localhost:5000/api/flightlogs/${updatedFlightLog._id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
@@ -34,16 +50,17 @@ export default function FlightDisplay() {
             if (!response.ok) {
                 throw new Error("Failed to update flight log.");
             }
-            // Update state with the saved flight log
-            setFlightLogs(flightLogs.map(log => (log._id === updatedFlightLog._id ? updatedFlightLog : log)));
+            const data = await response.json();
+            dispatch(updateFlightSuccess(data))
         } catch (error) {
+            dispatch(updateFlightFailure(error.message))
             console.error("Error saving flight log:", error.message);
         }
     };
 
-    // Handle deletion of flight log
     const handleDelete = async (id) => {
         try {
+            dispatch(deleteFlightStart())
             const response = await fetch(`http://localhost:5000/api/flightlogs/${id}`, {
                 method: 'DELETE',
                 credentials: 'include',
@@ -51,15 +68,15 @@ export default function FlightDisplay() {
             if (!response.ok) {
                 throw new Error("Failed to delete flight log.");
             }
-            // Update state by removing the deleted flight log
-            setFlightLogs(flightLogs.filter(log => log._id !== id));
+            dispatch(deleteFlightSuccess(id))
         } catch (error) {
+            dispatch(deleteFlightFailure(error.message))
             console.error("Error deleting flight log:", error.message);
         }
     };
 
     // Filter flight logs based on search query
-    const filteredFlightLogs = flightLogs.filter(log =>
+    const filteredFlightLogs = flights.filter(log =>
         (log.flightID?.toString() || '').toLowerCase().includes(searchQuery.toLowerCase())
     );
 
@@ -82,6 +99,11 @@ export default function FlightDisplay() {
             ) : (
                 <p className="text-gray-500">No flight logs found.</p>
             )}
+            <div>
+                {errors && errors.map((error, index) => (
+                    <p key={index} className="text-red-500">{error}</p>
+                ))}
+            </div>
         </div>
     );
 }
