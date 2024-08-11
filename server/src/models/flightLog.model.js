@@ -18,7 +18,7 @@ const FlightLogSchema = mongoose.Schema({
         required: true
     },
     Duration: {
-        type: Date,
+        type: Number,
         required: true
     },
 }, 

@@ -135,7 +135,7 @@ function FlightRegistrationForm( {setFormVisible} ) {
                 <Form.Group className="mb-4">
                     <Form.Label className="block text-gray-700 font-medium">Duration</Form.Label>
                     <Form.Control
-                        type="datetime-local"
+                        type="text"
                         name="Duration"
                         placeholder="Enter Duration"
                         onChange={handleChange}
