@@ -1,13 +1,17 @@
 import { Form } from "react-bootstrap";
 import React, { useState } from 'react';
 import {useDispatch, useSelector} from 'react-redux'
+import {
+    addFlightStart,
+    addFlightSuccess,
+    addFlightFailure,
+    clearErrors
+} from '../redux/flight/flightSlice'
 import { Link, useNavigate } from "react-router-dom";
 
 function FlightRegistrationForm( {setFormVisible} ) {
     const [formData, setFormData] = useState({})
-    // use userSlice or should we use flightSlice?
-    const {loading, error} = useSelector((state)=> state.user)
-    const navigate = useNavigate()
+    const {flights, loading, errors} = useSelector((state)=> state.flight)
     const dispatch = useDispatch()
 
     const handleChange = (e) => {
@@ -15,43 +19,74 @@ function FlightRegistrationForm( {setFormVisible} ) {
     }
 
     const validateFormBeforeSubmit = () => {
-        var flag = false;
+        let flag = true;
+    
         if (!formData.flightID || formData.flightID.trim() === '') {
-            // dispatch(signInFailure("flightID is required."))
-            flag = true;
+            dispatch(addFlightFailure("flightID is required"))
+            flag = false;
         }
         if (!formData.tailNumber || formData.tailNumber.trim() === '') {
-            // dispatch(signInFailure("tailNumber is required."))
-            flag = true;
+            dispatch(addFlightFailure("tailNumber is required."))
+            flag = false;
         }
         if (!formData.takeoff || formData.takeoff.trim() === '') {
-            // dispatch(signInFailure("takeoff is required."))
-            flag = true;
+            dispatch(addFlightFailure("takeoff is required."))
+            flag = false;
         }
         if (!formData.landing || formData.landing.trim() === '') {
-            // dispatch(signInFailure("landing is required."))
-            flag = true;
+            dispatch(addFlightFailure("landing is required."))
+            flag = false;
+        }
+        if (formData.landing < formData.takeoff) {
+            dispatch(addFlightFailure("landing cannot be before take off."))
+            flag = false;
         }
         if (!formData.Duration || formData.Duration.trim() === '') {
-            // dispatch(signInFailure("Duration is required."))
-            flag = true;
+            dispatch(addFlightFailure("Duration is required."))
+            flag = false;
         }
-        if (flag == true) {
-            return false;
-        }
-        else {
-            return true;
-        }
+        
+        return flag;
     }
 
-    const submitForm = (e) => {
+    const submitForm = async (e) => {
         e.preventDefault();
+        dispatch(clearErrors())
         if (!validateFormBeforeSubmit()) {
             return;
         }
-        console.log(formData)
-        setFormData({});
-        setFormVisible(false)
+        
+        try {
+            dispatch(clearErrors())
+            dispatch(addFlightStart())
+            const res = await fetch("http://localhost:5000/api/flightlogs", {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'include',
+                body: JSON.stringify(formData)
+            })
+            if (!res.ok) {
+                const errorData = await res.json();
+                if (res.status === 404 || (errorData.message && errorData.message.includes('Username not found'))) {
+                    throw new Error("Username is not found.");
+                }
+                else if (res.status === 401 || (errorData.message && errorData.message.includes('Wrong Password entered'))) {
+                    throw new Error("Incorrect password. Try again.");
+                } 
+                else {
+                    throw new Error(errorData.message || "Something went wrong. Please try again.");
+                }
+            }
+            const data = await res.json()
+            dispatch(addFlightSuccess(data))
+            setFormData({});
+            setFormVisible(false)
+        }
+        catch (err) {
+            dispatch(addFlightFailure(err.message))
+        }   
     }
 
     return (
@@ -115,6 +150,12 @@ function FlightRegistrationForm( {setFormVisible} ) {
                     Submit
                 </button>
             </form>
+            <div className="">
+            {errors.length>0 && errors.map((err, index) => (
+                <p key={index} className="text-red-500 text-center mt-4">{err}</p>
+            ))} 
+            </div>
+            
         </div>
     );
 }
