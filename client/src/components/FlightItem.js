@@ -2,19 +2,60 @@ import React, { useState } from 'react';
 
 export default function FlightItem({ flightLog, onSave, onDelete }) {
     const [isEditing, setIsEditing] = useState(false);
+    const [errors, setErrors] = useState([]);
     const [editedFlightLog, setEditedFlightLog] = useState({ ...flightLog });
 
     // Handle input changes
     const handleChange = (e) => {
+        setErrors([]);
         setEditedFlightLog({
             ...editedFlightLog,
             [e.target.name]: e.target.value
         });
     };
 
+    const validateFormBeforeSubmit = (updatedFlightLog) => {
+        let flag = true;
+        const newErrors = [];
+
+        if (!updatedFlightLog.flightID) {
+            newErrors.push("flightID is required.");            
+            flag = false;
+        }
+        if (!updatedFlightLog.tailNumber) {
+            newErrors.push("tailNumber is required.");
+            flag = false;
+        }
+        if (!updatedFlightLog.takeoff) {
+            newErrors.push("takeoff is required.");
+            flag = false;
+        }
+        if (!updatedFlightLog.landing) {
+            newErrors.push("landing is required.");
+            flag = false;
+        }
+        if (updatedFlightLog.landing < updatedFlightLog.takeoff) {
+            newErrors.push("landing cannot be before take off.");
+            flag = false;
+        }
+        if (!updatedFlightLog.Duration) {
+            newErrors.push("Duration is required.");
+            flag = false;
+        }
+        setErrors(newErrors);
+        console.log(errors)
+        return flag;
+    }
+
     const handleSave = () => {
+        setErrors([]);
+        if (!validateFormBeforeSubmit(editedFlightLog)) {
+            return;
+        }
         onSave(editedFlightLog);
-        setIsEditing(false);
+        if (errors.length === 0) {
+            setIsEditing(false);
+        }
     };
 
     const handleCancel = () => {
@@ -82,6 +123,11 @@ export default function FlightItem({ flightLog, onSave, onDelete }) {
                                 onChange={handleChange}
                                 className="border border-gray-300 p-2 rounded w-full"
                             />
+                        </div>
+                        <div>
+                        {errors && errors.map((error, index) => (
+                            <p key={index} className="text-red-500">{error}</p>
+                        ))}
                         </div>
                     </div>
                     <div className="flex justify-end mt-4">
