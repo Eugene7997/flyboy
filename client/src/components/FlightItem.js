@@ -12,22 +12,19 @@ export default function FlightItem({ flightLog, onSave, onDelete }) {
         });
     };
 
-    // Save changes and exit edit mode
     const handleSave = () => {
-        onSave(editedFlightLog); // Pass updated flight log to parent
+        onSave(editedFlightLog);
         setIsEditing(false);
     };
 
-    // Cancel editing
     const handleCancel = () => {
-        setEditedFlightLog({ ...flightLog }); // Reset to original flight log
+        setEditedFlightLog({ ...flightLog });
         setIsEditing(false);
     };
 
-    // Handle deletion
     const handleDelete = () => {
         if (window.confirm("Are you sure you want to delete this flight log?")) {
-            onDelete(flightLog._id); // Pass the ID of the flight log to parent
+            onDelete(flightLog._id);
         }
     };
 
