@@ -7,7 +7,6 @@ import {
     addFlightFailure,
     clearErrors
 } from '../redux/flight/flightSlice'
-import { Link, useNavigate } from "react-router-dom";
 
 function FlightRegistrationForm( {setFormVisible} ) {
     const [formData, setFormData] = useState({})
@@ -91,7 +90,7 @@ function FlightRegistrationForm( {setFormVisible} ) {
 
     return (
         <div className="bg-white shadow-md rounded-lg p-4 mb-4">
-            <h1 className="text-2xl font-semibold mb-4 text-center">Registration Form</h1>
+            <h1 className="text-2xl font-semibold mb-4 text-center">Add new Flight Log</h1>
             <form onSubmit={submitForm}>
                 <Form.Group className="mb-4">
                     <Form.Label className="block text-gray-700 font-medium">Flight ID</Form.Label>
