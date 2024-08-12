@@ -8,9 +8,27 @@ export default function FlightItem({ flightLog, onSave, onDelete }) {
     // Handle input changes
     const handleChange = (e) => {
         setErrors([]);
+        const newErrors = []
+        const {name, value} = e.target
+        if (name === 'landing') {
+            const date = new Date(value);
+            if (isNaN(date.getTime())) {
+                newErrors.push("Invalid date-time input for takeoff")
+                setErrors(newErrors)
+                return;
+            }
+        }
+        if (name === 'takeoff') {
+            const date = new Date(value);
+            if (isNaN(date.getTime())) {
+                newErrors.push("Invalid date-time input for landing")
+                setErrors(newErrors)
+                return;
+            }
+        }
         setEditedFlightLog({
             ...editedFlightLog,
-            [e.target.name]: e.target.value
+            [name]: value
         });
     };
 
@@ -109,7 +127,7 @@ export default function FlightItem({ flightLog, onSave, onDelete }) {
                             <input 
                                 type="datetime-local" 
                                 name="landing" 
-                                value={new Date(editedFlightLog.landing).toISOString().slice(0, 16)} 
+                                value={new Date(editedFlightLog.landing).toISOString().slice(0, 16)}
                                 onChange={handleChange}
                                 className="border border-gray-300 p-2 rounded w-full"
                             />
