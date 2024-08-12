@@ -68,15 +68,7 @@ function FlightRegistrationForm( {setFormVisible} ) {
             })
             if (!res.ok) {
                 const errorData = await res.json();
-                if (res.status === 404 || (errorData.message && errorData.message.includes('Username not found'))) {
-                    throw new Error("Username is not found.");
-                }
-                else if (res.status === 401 || (errorData.message && errorData.message.includes('Wrong Password entered'))) {
-                    throw new Error("Incorrect password. Try again.");
-                } 
-                else {
-                    throw new Error(errorData.message || "Something went wrong. Please try again.");
-                }
+                throw new Error(errorData.message || "Something went wrong. Please try again.");
             }
             const data = await res.json()
             dispatch(addFlightSuccess(data))

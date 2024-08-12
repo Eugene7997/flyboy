@@ -48,7 +48,13 @@ export default function FlightDisplay() {
                 credentials: 'include',
             });
             if (!response.ok) {
-                throw new Error("Failed to update flight log.");
+                const errorData = await response.json();
+                if (response.status === 404 || (errorData.message && errorData.message.includes('Flight log not found'))) {
+                    throw new Error("Flight log is not found.");
+                }
+                else {
+                    throw new Error(errorData.message || "Something went wrong. Please try again.");
+                }
             }
             const data = await response.json();
             dispatch(updateFlightSuccess(data))
@@ -66,7 +72,13 @@ export default function FlightDisplay() {
                 credentials: 'include',
             });
             if (!response.ok) {
-                throw new Error("Failed to delete flight log.");
+                const errorData = await response.json()
+                if (response.status === 404 || (errorData.message && errorData.message.includes('Flight log not found'))) {
+                    throw new Error("Flight log is not found.");
+                }
+                else {
+                    throw new Error(errorData.message || "Something went wrong. Please try again.");
+                }
             }
             dispatch(deleteFlightSuccess(id))
         } catch (error) {
