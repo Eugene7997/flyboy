@@ -5,7 +5,7 @@
     An simple web application created using MERN stack
     <br />
     <br />
-    <!-- <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a> -->
+    <a href="https://flyboys.site/">View Demo</a>
 </div>
 
 
@@ -28,14 +28,14 @@ This section details how I set up the web application development.
 
 ### Installation
 
-clone the repo.
+clone the repo:
 
 ```sh
 git clone https://github.com/Eugene7997/flyboy.git
 cd flyboy
 ```
 
-create a `.env` file and add the following to it.
+create a `.env` file and add the following to it:
 
 ```txt
 DB_URI={your_api_key}
@@ -60,14 +60,14 @@ npm install
 
 ## Usage
 
-To start the client,
+To start the client:
 
 ```sh
 cd client
 npm start
 ```
 
-To start the server,
+To start the server:
 
 ```sh
 cd server
