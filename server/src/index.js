@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser')
 const app = express()
 const flightlogRoutes = require('./routes/flightlog.route')
 const userRoutes = require('./routes/auth.route')
+const path = require('path');
 
 app.use(cors({credentials:true, origin: "http://localhost:3000", methods: "GET,HEAD,PUT,PATCH,POST,DELETE"}))
 app.use(express.json())
@@ -18,6 +19,12 @@ app.use("/api/users", userRoutes)
 app.get("/", (req, res)=>{
     res.send("App is Working");
 })
+
+// For production
+app.use(express.static(path.join(__dirname, "../../client/build")))
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../client/build', 'index.html'));
+});
 
 mongoose.connect(process.env.DB_URI)
     .then(()=>{
