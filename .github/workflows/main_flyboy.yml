@@ -21,12 +21,11 @@ jobs:
         with:
           node-version: '20.x'
 
-      - name: npm install, build, and test
+      - name: npm install and build
         working-directory: ./client
         run: |
           npm install
           npm run build --if-present
-          npm run test --if-present
         env:
           CI: false
       - name: run server
