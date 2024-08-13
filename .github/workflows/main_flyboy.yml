@@ -60,16 +60,14 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID }}
-          federated-token: ${{ secrets.AZURE_CLIENT_SECRET }}
-          allow-no-subscriptions: true
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_F67DB1A66D7E4444BB83F95588C13731 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_2B08D71BCC6643A29C541BEE52F73F5C }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_8BE32EEF2AAF418D924C95597A407107 }}
 
-      - name: Deploy to Azure Web App
+      - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'FlyBoy'
           slot-name: 'Production'
-          package: './release'
+          package: .
