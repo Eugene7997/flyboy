@@ -36,7 +36,7 @@ export default function FlightDisplay() {
             }
         };
         fetchFlightLogs();
-    }, []);
+    }, [dispatch]);
 
     const handleSave = async (updatedFlightLog) => {
         try {
