@@ -31,15 +31,15 @@ jobs:
       - name: run server
         run: |
         working-directory: ./server
-          node ./src/index.js
-      - name: Zip artifact for deployment
-        run: zip release.zip ./* -r
+          node /src/index.js
+      # - name: Zip artifact for deployment
+      #   run: zip release.zip ./* -r
 
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v4
-        with:
-          name: node-app
-          path: release.zip
+      # - name: Upload artifact for deployment job
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: node-app
+      #     path: release.zip
 
   deploy:
     runs-on: ubuntu-latest
