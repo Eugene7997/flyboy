@@ -29,8 +29,8 @@ jobs:
         env:
           CI: false
       - name: run server
-        run: |
         working-directory: ./server
+        run: |
           node /src/index.js
       # - name: Zip artifact for deployment
       #   run: zip release.zip ./* -r
