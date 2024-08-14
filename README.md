@@ -104,7 +104,7 @@ Optional
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 # video-demo
+https://youtu.be/7mEjCoPxlck
 
-Uploading demo_video.mp4…
 
 
